@@ -2,13 +2,11 @@ package taskGoFile
 
 import (
 	"context"
-	"crypto/ecdsa"
 	"log"
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
@@ -53,19 +51,9 @@ func BlockchainReadWrite() {
 
 	//发送交易
 	//准备一个 Sepolia 测试网络的以太坊账户，并获取其私钥。
-	privateKeyECDSA, err := crypto.HexToECDSA(privateKeyHex)
-	if err != nil {
-		log.Fatal("私钥解析失败：%v", err)
-	}
-	publicKey := privateKeyECDSA.Public()
-	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
-	if !ok {
-		log.Fatal("无法获取公钥")
-	}
-
 	//构造一笔简单的以太币转账交易，指定发送方、接收方和转账金额。
 	// 发送方
-	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
+	fromAddress, privateKeyECDSA := getFromAddressByPrivateKeyHex()
 
 	// 接收方
 	toAddress := common.HexToAddress("0x0d6913C10f0F2E63b56fb6FD56E24D510c4AF538")
